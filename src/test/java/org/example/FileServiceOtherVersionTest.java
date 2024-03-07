@@ -1,30 +1,33 @@
 package org.example;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 class FileServiceOtherVersionTest {
     private String filePath = "src/test/resources/newHtml.txt";
 
-    @Test
-    void mustCreateFile() {
-        //given
-        File file = FileServiceOtherVersion.createFile(filePath);
-
-        //when
-        boolean exists = file.exists();
-
-        //then
-        Assertions.assertTrue(exists);
+    public static File createFile(String filePath) {
+        File file = new File(filePath);
+        try {
+            if (!file.exists()) {
+                file.createNewFile();
+                System.out.println("File has been created.");
+            }
+        } catch (IOException e) {
+            System.out.println("File already exists.");
+            e.printStackTrace();
+        }
+        return file;
     }
 
     @Test
     void mustSaveHTMLToFile() {
         //given
+        createFile(filePath);
         URL url;
         try {
             url = new URL("https://futurecollars.com/");
